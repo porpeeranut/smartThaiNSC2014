@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=10" >
+<html>
+	<body>
+	<link rel="stylesheet" href="style.css">
+<div style="display:none">
+<textarea id="a" rows="30" cols="50" style="display:none">asdf1
+*asdfasdf2
+**asdfasdf3
+*asdfsadf4
+**asdfasdf5
+***asdf6
+**asdf7
+***asdf8
+****asdf9
+****asdf10
+****asdf11
+****asdf12
+****asdf12
+****asdf12
+****asdf12
+</textarea>
+<script>
+function update(){
+var a = new MAPJS.content(test_tree());
+mapModel.setIdea(a);
+}</script>
+		<input type="button" class="addSubIdea" value="add"></input>
+		<input type="button" class="editNode" value="edit"></input>
+		<input type="button" class="removeSubIdea" value="delete"></input>
+		<input type="button" class="insertIntermediate" value="insert parent"></input>
+		<input type="button" class="toggleCollapse" value="exp/col"></input>
+		<input type="button" onclick="mapModel.setInputEnabled(false)" value="disable"></input>
+		<input type="button" onclick="mapModel.setInputEnabled(true)" value="enable"></input>
+		<input type="button" class="undo" value="undo"></input>
+		<input type="button" class="redo" value="redo"></input>
+		<input type="button" data-mm-action="export-image" value="Export To Image"/>
+		<input type="button" class="cut" value="cut"></input>
+		<input type="button" class="copy" value="copy"></input>
+		<input type="button" class="paste" value="paste"></input>
+		<input type="button" class="openAttachment" value="open attachment"></input>
+		<input type="button" class="toggleAddLinkMode" value="add link"></input>
+		Background: <input type="text" class='updateStyle' data-mm-target-property='background'></input>
+    Frames: <span id="framerate"></span>
+    Cycle: <span id="cyclerate"></span>
+		<div id="linkEditWidget">
+			<input class="delete" type="button" value="Delete"></input>
+			<select class="color">
+				<option value="red">Red</option>
+				<option value="blue">Blue</option>
+			</select>
+			<select class="lineStyle">
+				<option value="solid">Solid</option>
+				<option value="dashed">Dashed</option>
+			</select>
+			<button class="arrow">Arrow</button>
+		</div>
+</div>
+		<div id="container"></div>
+<div id="control">
+		<input type="button" class="resetView" value="0" x></input>
+		<input type="button" class="scaleUp" value="+" x></input>
+		<input type="button" class="scaleDown" value="-" x></input>
+</div>
+		<script type="text/javascript" src="jquery-2.0.2.min.js"></script>
+		<script type="text/javascript" src="jquery.mousewheel-3.1.9.js"></script>
+		<script src="jquery.hotkeys.js"></script>
+		<script src="jquery.hammer.min.js"></script>
+		<script type="text/javascript" src="underscore-1.4.4.js"></script>
+		<script type="text/javascript" src="kinetic-v4.5.4.js"></script>
+		<script src="color-0.4.1.min.js"></script>
+		<script type="text/javascript" src="kinetic.clip.js"></script>
+		<script type="text/javascript" src="kinetic.idea.js"></script>
+		<script type="text/javascript" src="kinetic.connector.js"></script>
+		<script type="text/javascript" src="kinetic.link.js"></script>
+		<script type="text/javascript" src="observable.js"></script>
+		<script type="text/javascript" src="mapjs.js"></script>
+		<script type="text/javascript" src="url-helper.js"></script>
+		<script type="text/javascript" src="content.js"></script>
+		<script type="text/javascript" src="layout.js"></script>
+		<script type="text/javascript" src="map-model.js"></script>
+		<script type="text/javascript" src="drag-and-drop.js"></script>
+		<script type="text/javascript" src="kinetic-mediator.js"></script>
+		<script type="text/javascript" src="map-toolbar-widget.js"></script>
+		<script type="text/javascript" src="png-exporter.js"></script>
+		<script type="text/javascript" src="map-widget.js"></script>
+		<script type="text/javascript" src="link-edit-widget.js"></script>
+		<script type="text/javascript" src="image-drop-widget.js"></script>
+		<script type="text/javascript" src="testtree.js"></script>
+		<script>
+			jQuery.fn.attachmentEditorWidget = function (mapModel) {
+				'use strict';
+				return this.each(function () {
+					var element = jQuery(this);
+					mapModel.addEventListener('attachmentOpened', function (nodeId, attachment) {
+						mapModel.setAttachment(
+							'attachmentEditorWidget',
+							nodeId, {
+								contentType: 'text/html',
+								content: prompt('attachment', attachment && attachment.content)
+							}
+						);
+					});
+				});
+			};
+			(function () {
+				window.onerror = alert;
+				var container = jQuery('#container'),
+				idea = MAPJS.content(test_tree()),
+				isTouch = false,
+				imageInsertController = new MAPJS.ImageInsertController("http://localhost:4999?u="),
+				mapModel = new MAPJS.MapModel(MAPJS.KineticMediator.layoutCalculator,['A brilliant idea...', 'A cunning plan...', 'We\'ll be famous...'], ['hoo har']);
+				container.mapWidget(console,mapModel, isTouch, imageInsertController);
+				jQuery('body').mapToolbarWidget(mapModel);
+				jQuery('body').attachmentEditorWidget(mapModel);
+				$("[data-mm-action='export-image']").click(function () {
+					MAPJS.pngExport(idea).then(function (url) {
+						window.open(url, '_blank');
+					});
+				});
+				mapModel.setIdea(idea);
+				jQuery('#linkEditWidget').linkEditWidget(mapModel);
+				window.mapModel = mapModel;
+				jQuery('.arrow').click(function () {
+					jQuery(this).toggleClass('active');
+				});
+				imageInsertController.addEventListener('imageInsertError', function (reason) {
+					console.log('image insert error', reason);
+				});
+			}());
+			
+		</script>
+		<script src="perftests.js"></script>
+	</body>
+</html>

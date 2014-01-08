@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=10" >
+<html>
+<head>
+<title>Mind Mapping</title>
+<style>
+#draw {
+	b-order:1px solid;
+	position:absolute;
+	z-index:-1;
+}
+html, body { 
+    height:100%;
+	margin: 0px;
+	padding: 0px;
+	font-family:Tahoma;
+}
+.Toolbox {
+	position:fixed;
+	bottom:0px;
+	left:0px;
+	width:100%;
+	background:gray;
+}
+.center{
+    b-ackground-color: #336699;
+    width: 100%;
+    min-height: 100%;
+	height: auto !important;
+	height: auto;
+    display: table;
+}
+.sub{
+    display: table-cell ;
+    vertical-align: middle;
+    text-align: center;
+}
+p {
+	padding:2px;
+	border:1px solid;
+	background:rgb(255,200,200);
+	display:inline-block;
+	position:fixed;
+	-border-radius: 20px;
+	vertical-align: middle;
+    user-select: none;
+}
+b {
+	padding:30px;
+	border:1px solid;
+	background:rgb(192,168,1);
+}
+body {
+    text-align: center;
+}
+
+#test {
+    margin: auto;
+    text-align: left;
+	vertical-align: middle;
+}
+</style>
+<script>
+var canvas;
+var ctx;
+var curX,curY,curTmpx,curTmpy,isdown=false,obj;
+//-------------------------------------------------------------------------
+var core = [];
+	
+
+
+//-------------------------------------------------------------------------
+/*function getP(){var ps = document.getElementsByTagName("p");
+for(var i = 0; i < ps.length; i++)
+	{
+	ps[i].onselectstart="return false;";
+    ps[i].onmousedown= md ;
+	}
+}
+*/
+function mm(){
+_mx=curX-curTmpx;
+_my=curY-curTmpy;
+if(isdown){
+obj.style.left=_mx+'px';
+obj.style.top=_my+'px';
+draw();
+}
+}
+function md(){
+obj=this;
+curTmpx=curX-obj.offsetLeft;
+curTmpy=curY-obj.offsetTop;
+isdown=true;
+}
+function mu(){
+isdown=false;
+obj=null;
+curTmpx=0;
+curTmpy=0;
+}
+//-------------------------------------------------------------------------
+function Node(parent,text,x,y){
+this.parent = parent;
+this.child = [];
+this.color = black;
+if(parent!=null)parent.child.push(this);
+else core.push(this); //first node
+this.obj = document.createElement('p');
+this.obj.innerHTML = text;
+this.obj.onselectstart="return false;";
+this.obj.onmousedown= md ;
+this.x = x;
+this.y = y;
+document.getElementById("container").appendChild(this.obj);
+this.setx=setx;
+this.sety=sety;
+	function setx(){
+	this.obj.style.left=this.x;
+	}	
+	function sety(){
+	this.obj.style.top=this.y;
+	}
+this.delete=deletee;
+	function deletee()
+	{
+	this.parentNode.removeChild(this);
+	if(parent!=null)parent.child.splice(parent.indexOf(this),1);
+	}
+}
+function addP(text){
+	var n = document.createElement('p');
+	n.innerHTML = text;
+	n.onselectstart="return false;";
+	n.onmousedown= md ;
+}
+document.onmouseup= mu ;
+document.onmousemove= mm ;
+//-------------------------------------------------------------------------
+function getW(e){
+return document.getElementById(e).offsetWidth;
+}
+function getH(e){
+return document.getElementById(e).offsetHeight;
+}
+function getX(e){
+return document.getElementById(e).offsetLeft;
+}
+function getY(e){
+return document.getElementById(e).offsetTop;
+}
+function getA(e1,e2){
+var y=(getY(e2)+(getH(e2)/2))-(getY(e1)+(getH(e1)/2));
+var x=(getX(e1)+(getW(e1)/2))-(getX(e2)+(getW(e2)/2));
+if(x>0&&y>0){if(x>y)return 1;else return 2;}
+if(x<0&&y>0){if(-x>y)return 3;else return 2;}
+if(x<0&&y<0){if(x<y)return 3;else return 4;}
+if(x>0&&y<0){if(x>-y)return 1;else return 4;}
+else return 0;
+}
+
+function line(e0,e1){
+	ctx.beginPath(); 
+	ctx.lineWidth="2";
+	ctx.strokeStyle="black"; // Green path
+	var w,h,ww,hh;
+	if(getA(e0,e1)==1){
+		w=getX(e1)+getW(e1);h=getY(e1)+(getH(e1)/2);
+		ww=getX(e0);hh=getY(e0)+(getH(e0)/2);
+	}
+	else if(getA(e0,e1)==2){
+		w=getX(e1)+(getW(e1)/2);h=getY(e1);
+		ww=getX(e0)+(getW(e0)/2);hh=getY(e0)+getH(e0);
+	}
+	else if(getA(e0,e1)==3){
+		w=getX(e1);h=getY(e1)+(getH(e1)/2);
+		ww=getX(e0)+getW(e0);hh=getY(e0)+(getH(e0)/2);
+	}
+	else if(getA(e0,e1)==4){
+		w=getX(e1)+(getW(e1)/2);h=getY(e1)+getH(e1);
+		ww=getX(e0)+(getW(e0)/2);hh=getY(e0);
+	}
+	ctx.moveTo(w,h);
+	ctx.lineTo(ww,hh);
+	ctx.stroke(); // Draw it
+}
+
+function draw(){canvas = document.getElementById("draw");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+ctx = canvas.getContext("2d");
+line("b0","m0");
+line("b1","m0");
+line("b2","m0");
+line("b3","m0");
+}
+function init(){
+
+window.addEventListener ("mousemove", function (e) {
+curX = e.clientX;
+curY = e.clientY;
+document.getElementById("Toolbox").innerHTML=curX+" px "+curY+" px";
+});
+//addP("asdf");
+var b5=new Node(null,"asdf",50,100);
+var b6=new Node(b5,"asdf",50,100);
+var b7=new Node(b5,"asdf",50,100);
+var b8=new Node(b5,"asdf",50,100);
+alert(b5.child[0].obj.innerHTML);
+//ctx.fillRect(50,50,400,400);
+document.getElementById("b3").innerHTML=getA("b2","m0");
+draw();
+//getP();
+}
+</script>
+</head>
+<body onload="init()" onresize="init()">
+<div class="center">
+<canvas id="draw" 	height="0px" width="0px"></canvas>
+   <span class="sub" id="container">
+   <p id="b0" style="left:100px;top:50px;">ชนิดของโพรโตซัว</p>
+   <p id="b1" style="left:100px;top:250px;">ชนิดของโพรโตซัว</p>
+   <p id="b2" style="left:900px;top:50px;">ชนิดของโพรโตซัว</p>
+   <p id="b3" style="left:100px;top:550px;">ชนิดของโพรโตซัว</p>
+	<b id="m0">โพรโทซัว</b>
+   </span>
+
+</div>
+
+<div class="Toolbox" id="Toolbox">
+SmartThai Mind Mapping beta version
+</div>
+
+</body>
