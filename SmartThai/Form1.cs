@@ -174,6 +174,10 @@ namespace SmartThai
                         radAnswer2.Text = no.choice[1];
                         radAnswer3.Text = no.choice[2];
                         radAnswer4.Text = no.choice[3];
+                        radAnswer1.Checked = false;
+                        radAnswer2.Checked = false;
+                        radAnswer3.Checked = false;
+                        radAnswer4.Checked = false;
                         return;
                     } else {
                         rndQus = 1;
@@ -208,7 +212,7 @@ namespace SmartThai
                     return;
                 }
             }
-            MessageBox.Show("ผิดครับ ลองใหม่อีกครั้งค่ะ");
+            MessageBox.Show("ผิดครับ ลองใหม่อีกครั้ง");
         }
 
         private void txtAnswer_Keypress(object sender, KeyPressEventArgs e)
@@ -221,26 +225,42 @@ namespace SmartThai
 
         private void radAnswer1_CheckedChanged(object sender, EventArgs e)
         {
-            if(radAnswer1.Checked)
-                MessageBox.Show("ถูกต้องแล้วครับ");
+            if (radAnswer1.Checked) {
+                if (no.ansIndex == 0)
+                    MessageBox.Show("ถูกต้องแล้วครับ");
+                else
+                    MessageBox.Show("ผิดครับ คำตอบคือข้อ " + (no.ansIndex + 1));
+            }
         }
 
         private void radAnswer2_CheckedChanged(object sender, EventArgs e)
         {
-            if (radAnswer2.Checked)
-                MessageBox.Show("ผิดครับ ลองใหม่อีกครั้งค่ะ");
+            if (radAnswer2.Checked) {
+                if (no.ansIndex == 1)
+                    MessageBox.Show("ถูกต้องแล้วครับ");
+                else
+                    MessageBox.Show("ผิดครับ คำตอบคือข้อ " + (no.ansIndex + 1));
+            }
         }
 
         private void radAnswer3_CheckedChanged(object sender, EventArgs e)
         {
-            if (radAnswer3.Checked)
-                MessageBox.Show("ผิดครับ ลองใหม่อีกครั้งค่ะ");
+            if (radAnswer3.Checked) {
+                if (no.ansIndex == 2)
+                    MessageBox.Show("ถูกต้องแล้วครับ");
+                else
+                    MessageBox.Show("ผิดครับ คำตอบคือข้อ " + (no.ansIndex + 1));
+            }
         }
 
         private void radAnswer4_CheckedChanged(object sender, EventArgs e)
         {
-            if (radAnswer4.Checked)
-                MessageBox.Show("ผิดครับ ลองใหม่อีกครั้งค่ะ");
+            if (radAnswer4.Checked) {
+                if (no.ansIndex == 3)
+                    MessageBox.Show("ถูกต้องแล้วครับ");
+                else
+                    MessageBox.Show("ผิดครับ คำตอบคือข้อ " + (no.ansIndex + 1));
+            }
         }
 
         private void txtUrl_Keypress(object sender, KeyPressEventArgs e)

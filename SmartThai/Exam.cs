@@ -14,6 +14,7 @@ namespace SmartThai
         public static int OBJ = 2;
 
         public int type;
+        public int ansIndex;
         public string qustion;
         public string[] choice;
     }
@@ -79,13 +80,21 @@ namespace SmartThai
             {
                 not = rndQus.Next(0, list.Count);
             }
+            int index = new Random().Next(4);
+            no.ansIndex = index;
             no.qustion = "ข้อใดไม่ใช่ " + Regex.Replace(smartLines[list[not][0]],"[*]", "") + " ของ " + smartLines[0];
             no.choice = new string[4];
-            no.choice[0] = Regex.Replace(smartLines[rndChot.Next(list[nof][0] + 1, list[nof][1] - 1)], "[*]", "");
-            no.choice[1] = Regex.Replace(smartLines[rndChof.Next(list[not][0] + 1, list[not][1] - 1)], "[*]", "");
-            no.choice[2] = Regex.Replace(smartLines[rndChof.Next(list[not][0] + 1, list[not][1] - 1)], "[*]", "");
-            no.choice[3] = Regex.Replace(smartLines[rndChof.Next(list[not][0] + 1, list[not][1] - 1)], "[*]", "");
-
+            no.choice[index] = Regex.Replace(smartLines[rndChot.Next(list[nof][0] + 1, list[nof][1] - 1)], "[*]", "");
+            index = (++index) % 4;
+            for (int i = 0; i < 3; i++) {
+                do
+                {
+                    no.choice[index] = Regex.Replace(smartLines[rndChof.Next(list[not][0] + 1, list[not][1] - 1)], "[*]", "");
+                } while (no.choice[index] == no.choice[(index + 1) % 4] ||
+                        no.choice[index] == no.choice[(index + 2) % 4] ||
+                        no.choice[index] == no.choice[(index + 3) % 4]);
+                index = (++index)%4;
+            }
             return no;
         }
 

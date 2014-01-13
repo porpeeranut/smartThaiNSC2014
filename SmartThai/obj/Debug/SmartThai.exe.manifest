@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SmartThai.exe" size="49664">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SmartThai.exe" size="50176">
       <assemblyIdentity name="SmartThai" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>hX4FJ8Lit1x0uaiwwsg23xchqiP1aZk/zxm3J6Tudj0=</dsig:DigestValue>
+        <dsig:DigestValue>5RJDLBr2Cp2NQuoZsbsj1ej2ZCujcz6QJWCMZ2rrkl4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
